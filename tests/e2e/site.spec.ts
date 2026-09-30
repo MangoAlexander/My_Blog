@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 const pages = [
-  ['/', 'Ideas worth keeping'],
+  ['/', '认真生活'],
   ['/writing/', 'Writing'],
   ['/writing/designing-for-the-return-visit/', 'Designing for the return visit'],
   ['/notes/', 'Notes'],

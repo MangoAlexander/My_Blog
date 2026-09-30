@@ -1,0 +1,91 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { byDateDesc, filterPublished, formatDate } from '@/utils/content';
+import { sitePath } from '@/utils/url';
+const posts = filterPublished(await getCollection('writing')).sort(byDateDesc);
+const years = Map.groupBy(posts, (post) => post.data.date.getFullYear());
+---
+
+<BaseLayout
+  title="Archive — Quiet Signal"
+  description="A chronological archive of all published writing."
+>
+  <header class="page-shell container">
+    <p class="eyebrow">Index</p>
+    <h1 class="page-title">Archive</h1>
+    <p class="lede">Everything published here, arranged by time rather than importance.</p>
+  </header>
+  <section class="archive container">
+    {[...years.entries()].map(([year, entries]) => (
+      <div class="year">
+        <h2>{year}</h2>
+        <ol>
+          {entries.map((post) => (
+            <li>
+              <time datetime={post.data.date.toISOString()}>
+                {formatDate(post.data.date, { year: undefined })}
+              </time>
+              <a href={sitePath(`/writing/${post.data.slug}/`)}>{post.data.title}</a>
+              <span>{post.data.tags[0]}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    ))}
+  </section>
+</BaseLayout>
+<style>
+  .archive {
+    padding-bottom: 8rem;
+  }
+  .year {
+    display: grid;
+    grid-template-columns: 0.35fr 1fr;
+    gap: 3rem;
+    padding: 3rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .year h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 400;
+    line-height: 1;
+  }
+  .year ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .year li {
+    display: grid;
+    grid-template-columns: 7rem 1fr auto;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .year time,
+  .year span {
+    color: var(--muted-foreground);
+    font-size: 0.76rem;
+  }
+  .year a {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+  }
+  .year a:hover {
+    color: var(--accent);
+  }
+  @media (max-width: 700px) {
+    .year {
+      grid-template-columns: 1fr;
+    }
+    .year li {
+      grid-template-columns: 5rem 1fr;
+    }
+    .year span {
+      display: none;
+    }
+  }
+</style>

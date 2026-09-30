@@ -1,0 +1,101 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { byDateDesc, filterPublished, formatDate } from '@/utils/content';
+import { sitePath } from '@/utils/url';
+const notes = filterPublished(await getCollection('notes')).sort(byDateDesc);
+---
+
+<BaseLayout
+  title="Notes — Quiet Signal"
+  description="Short notes, fragments, useful links, and unfinished thoughts from a digital garden."
+>
+  <header class="page-shell container">
+    <p class="eyebrow">Digital garden</p>
+    <h1 class="page-title">Notes</h1>
+    <p class="lede">
+      Short observations, code fragments, and ideas kept in motion. Less polished than essays; no
+      less considered.
+    </p>
+  </header>
+  <section class="section container">
+    <ol class="notes-list">
+      {notes.map((note, index) => (
+        <li>
+          <a href={sitePath(`/notes/${note.data.slug}/`)}>
+            <div class="note-number meta">{String(index + 1).padStart(2, '0')}</div>
+            <div>
+              <h2>{note.data.title}</h2>
+              <p>{note.body?.trim()}</p>
+              <div class="note-foot">
+                <time class="meta" datetime={note.data.date.toISOString()}>
+                  {formatDate(note.data.date)}
+                </time>
+                <div class="tag-list">
+                  {note.data.tags.map((tag) => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <span class="arrow" aria-hidden="true">
+              ↗
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+</BaseLayout>
+<style>
+  .notes-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--border);
+  }
+  li {
+    border-bottom: 1px solid var(--border);
+  }
+  li a {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    padding: 2.2rem 0;
+  }
+  h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+    font-weight: 400;
+    line-height: 1.1;
+  }
+  p {
+    max-width: 45rem;
+    margin: 0.8rem 0 1.3rem;
+    color: var(--muted-foreground);
+  }
+  .note-foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+  }
+  .arrow {
+    color: var(--accent);
+    transition: transform 180ms ease;
+  }
+  a:hover h2 {
+    color: var(--accent);
+  }
+  a:hover .arrow {
+    transform: translate(0.2rem, -0.2rem);
+  }
+  @media (max-width: 620px) {
+    li a {
+      grid-template-columns: 2rem minmax(0, 1fr);
+    }
+    .arrow {
+      display: none;
+    }
+  }
+</style>

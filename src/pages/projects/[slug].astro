@@ -1,0 +1,131 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { sitePath } from '@/utils/url';
+export async function getStaticPaths() {
+  return (await getCollection('projects'))
+    .filter((p) => !p.data.draft)
+    .map((project) => ({ params: { slug: project.data.slug }, props: { project } }));
+}
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<BaseLayout
+  title={`${project.data.name} — Projects — Quiet Signal`}
+  description={project.data.description}
+  image={project.data.cover}
+>
+  <article>
+    <header class="project-hero container">
+      <a class="back" href="../">
+        ← All projects
+      </a>
+      <div class="project-title">
+        <div>
+          <p class="eyebrow">Project · {project.data.year}</p>
+          <h1>{project.data.name}</h1>
+        </div>
+        <div class="project-summary">
+          <p>{project.data.description}</p>
+          <div class="project-links">
+            {project.data.demo && <a href={project.data.demo}>Visit project ↗</a>}
+            {project.data.github && <a href={project.data.github}>Source ↗</a>}
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="container project-cover">
+      <img
+        src={sitePath(project.data.cover)}
+        alt={project.data.coverAlt}
+        width="1600"
+        height="960"
+      />
+    </div>
+    <div class="project-body container">
+      <aside>
+        <p class="meta">Built with</p>
+        {project.data.tech.map((item) => (
+          <span>{item}</span>
+        ))}
+      </aside>
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+<style>
+  .project-hero {
+    padding-block: 4rem 5rem;
+  }
+  .back {
+    color: var(--muted-foreground);
+    font-size: 0.8rem;
+  }
+  .project-title {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 4rem;
+    align-items: end;
+    margin-top: 6rem;
+  }
+  .project-title h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 8vw, 7.5rem);
+    font-weight: 400;
+    letter-spacing: -0.055em;
+    line-height: 0.92;
+  }
+  .project-summary > p {
+    color: var(--muted-foreground);
+    font-size: 1.15rem;
+  }
+  .project-links {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    color: var(--accent);
+    font-size: 0.82rem;
+  }
+  .project-cover img {
+    width: 100%;
+    aspect-ratio: 5/3;
+    object-fit: cover;
+  }
+  .project-body {
+    display: grid;
+    grid-template-columns: 10rem minmax(0, var(--reading));
+    gap: clamp(3rem, 10vw, 10rem);
+    justify-content: center;
+    padding-block: 6rem 8rem;
+  }
+  .project-body aside {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+  }
+  .project-body aside .meta {
+    margin-bottom: 0.6rem;
+  }
+  @media (max-width: 700px) {
+    .project-title,
+    .project-body {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .project-title {
+      margin-top: 4rem;
+    }
+    .project-body aside {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    .project-body aside .meta {
+      width: 100%;
+    }
+  }
+</style>

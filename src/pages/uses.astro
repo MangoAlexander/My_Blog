@@ -1,0 +1,86 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import uses from '@/data/uses.json';
+---
+
+<BaseLayout
+  title="Uses — Quiet Signal"
+  description="Hardware, software, development tools, and everyday objects I rely on."
+>
+  <header class="page-shell container">
+    <p class="eyebrow">Tools & objects</p>
+    <h1 class="page-title">Uses</h1>
+    <p class="lede">{uses.intro}</p>
+  </header>
+  <section class="uses container">
+    {uses.sections.map((section, index) => (
+      <div class="uses-section">
+        <div class="uses-heading">
+          <span class="meta">0{index + 1}</span>
+          <h2>{section.title}</h2>
+        </div>
+        <div>
+          {section.items.map((item) => (
+            <article>
+              <h3>{item.name}</h3>
+              <p>{item.detail}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+</BaseLayout>
+<style>
+  .uses {
+    padding-bottom: 8rem;
+  }
+  .uses-section {
+    display: grid;
+    grid-template-columns: 0.65fr 1fr;
+    gap: 4rem;
+    padding: 3.5rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .uses-heading {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+  }
+  .uses h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3.3rem);
+    font-weight: 400;
+  }
+  .uses article {
+    display: grid;
+    grid-template-columns: 0.45fr 1fr;
+    gap: 2rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .uses article:first-child {
+    padding-top: 0;
+  }
+  .uses h3,
+  .uses p {
+    margin: 0;
+  }
+  .uses h3 {
+    font-size: 0.95rem;
+  }
+  .uses p {
+    color: var(--muted-foreground);
+    font-size: 0.9rem;
+  }
+  @media (max-width: 700px) {
+    .uses-section,
+    .uses article {
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+    }
+    .uses-heading {
+      grid-template-columns: 2rem 1fr;
+    }
+  }
+</style>

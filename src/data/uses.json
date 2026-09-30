@@ -1,0 +1,43 @@
+{
+  "intro": "Tools I trust enough to stop thinking about.",
+  "sections": [
+    {
+      "title": "Hardware",
+      "items": [
+        { "name": "ThinkPad", "detail": "A durable Linux workstation." },
+        { "name": "iPad", "detail": "Reading, sketching, and light editing away from the desk." }
+      ]
+    },
+    {
+      "title": "Software",
+      "items": [
+        { "name": "Firefox", "detail": "The browser I use for most daily work." },
+        { "name": "Obsidian", "detail": "Loose notes before they become durable writing." }
+      ]
+    },
+    {
+      "title": "Development",
+      "items": [
+        {
+          "name": "Neovim + VS Code",
+          "detail": "Different tools for different modes of attention."
+        },
+        { "name": "GitHub", "detail": "Source, history, publishing, and collaboration." }
+      ]
+    },
+    {
+      "title": "Desk",
+      "items": [
+        { "name": "A warm task light", "detail": "More important than another screen." },
+        { "name": "Paper notebook", "detail": "For problems that need to slow down." }
+      ]
+    },
+    {
+      "title": "Everyday",
+      "items": [
+        { "name": "Fountain pen", "detail": "A small ritual that keeps notes deliberate." },
+        { "name": "Noise-cancelling headphones", "detail": "A portable room of one's own." }
+      ]
+    }
+  ]
+}

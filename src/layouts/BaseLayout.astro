@@ -1,0 +1,120 @@
+---
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import site from '@/data/site.json';
+import '@/styles/global.css';
+import { sitePath } from '@/utils/url';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  structuredData?: Record<string, unknown>;
+}
+
+const {
+  title = site.title,
+  description = site.description,
+  image = '/images/og-default.svg',
+  type = 'website',
+  noindex = false,
+  structuredData,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url);
+const imageUrl = new URL(sitePath(image), Astro.site ?? site.url);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f4f2ed" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111210" media="(prefers-color-scheme: dark)" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={sitePath('/favicon.svg')} type="image/svg+xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${site.name} RSS`}
+      href={sitePath('/rss.xml')}
+    />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <title>{title}</title>
+    <script is:inline>
+      (() => {
+        try {
+          const preference = localStorage.getItem('theme') || 'system';
+          const dark =
+            preference === 'dark' ||
+            (preference === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+          document.documentElement.dataset.preference = preference;
+        } catch {
+          // Storage can be unavailable in privacy-restricted contexts.
+        }
+      })();
+    </script>
+    {structuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
+  </head>
+  <body data-pagefind-ignore={noindex ? '' : undefined}>
+    <a class="skip-link" href="#main-content">
+      Skip to content
+    </a>
+    <Header />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      document.querySelectorAll<HTMLPreElement>('.prose pre').forEach((block) => {
+        const button = document.createElement('button');
+        button.className = 'copy-code';
+        button.type = 'button';
+        button.textContent = 'Copy';
+        button.setAttribute('aria-label', 'Copy code to clipboard');
+        button.addEventListener('click', async () => {
+          await navigator.clipboard.writeText(block.textContent || '');
+          button.textContent = 'Copied';
+          window.setTimeout(() => (button.textContent = 'Copy'), 1600);
+        });
+        block.append(button);
+      });
+    </script>
+    <style is:global>
+      .copy-code {
+        position: absolute;
+        top: 0.55rem;
+        right: 0.55rem;
+        padding: 0.28rem 0.5rem;
+        border: 1px solid var(--border);
+        border-radius: 0.25rem;
+        background: var(--background);
+        color: var(--muted-foreground);
+        font: 600 0.68rem var(--sans);
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 160ms ease;
+      }
+      .prose pre:hover .copy-code,
+      .copy-code:focus-visible {
+        opacity: 1;
+      }
+    </style>
+  </body>
+</html>

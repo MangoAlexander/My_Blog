@@ -1,0 +1,66 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { filterPublished, tagSlug } from '@/utils/content';
+import { sitePath } from '@/utils/url';
+const posts = filterPublished(await getCollection('writing'));
+const counts = new Map<string, number>();
+for (const post of posts)
+  for (const tag of post.data.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+const tags = [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+---
+
+<BaseLayout title="Tags — Quiet Signal" description="Browse writing by recurring subject.">
+  <header class="page-shell container">
+    <p class="eyebrow">Subjects</p>
+    <h1 class="page-title">Tags</h1>
+    <p class="lede">Recurring threads across the writing.</p>
+  </header>
+  <section class="tags-index container">
+    <ol>
+      {tags.map(([tag, count], index) => (
+        <li>
+          <a href={sitePath(`/tags/${encodeURIComponent(tagSlug(tag))}/`)}>
+            <span class="meta">{String(index + 1).padStart(2, '0')}</span>
+            <h2>#{tag}</h2>
+            <span>
+              {count} {count === 1 ? 'piece' : 'pieces'} →
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+</BaseLayout>
+<style>
+  .tags-index {
+    padding-bottom: 8rem;
+  }
+  .tags-index ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--border);
+  }
+  a {
+    display: grid;
+    grid-template-columns: 4rem 1fr auto;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+    font-weight: 400;
+  }
+  a > span:last-child {
+    color: var(--muted-foreground);
+    font-size: 0.8rem;
+  }
+  a:hover h2 {
+    color: var(--accent);
+  }
+</style>

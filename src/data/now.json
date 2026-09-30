@@ -1,0 +1,18 @@
+{
+  "updated": "2026-09-24",
+  "intro": "A snapshot of what has my attention right now.",
+  "reading": [
+    "The Timeless Way of Building — Christopher Alexander",
+    "A collection of Ursula K. Le Guin essays"
+  ],
+  "building": ["A calmer publishing workflow", "Small tools that make local-first work easier"],
+  "learning": [
+    "How type changes the emotional temperature of an interface",
+    "More patient ways to document decisions"
+  ],
+  "listening": ["Nils Frahm during long focus sessions", "City sounds with the window open"],
+  "thinking": [
+    "Good defaults are a form of hospitality",
+    "The best systems leave room for a person to change their mind"
+  ]
+}

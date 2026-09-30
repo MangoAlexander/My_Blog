@@ -1,0 +1,7 @@
+dist
+node_modules
+.astro
+pnpm-lock.yaml
+playwright-report
+artifacts
+MASTER_CODEX_PROMPT.md

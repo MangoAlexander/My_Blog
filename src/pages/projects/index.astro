@@ -1,0 +1,141 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { sitePath } from '@/utils/url';
+const projects = (await getCollection('projects'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.year - a.data.year);
+const featured = projects.filter((p) => p.data.featured);
+const rest = projects.filter((p) => !p.data.featured);
+---
+
+<BaseLayout
+  title="Projects — Quiet Signal"
+  description="Selected software, publishing, and interface projects."
+>
+  <header class="page-shell container">
+    <p class="eyebrow">Selected work</p>
+    <h1 class="page-title">Projects</h1>
+    <p class="lede">
+      Useful things, small experiments, and long-running attempts to make software feel more humane.
+    </p>
+  </header>
+  <section class="section container">
+    <div class="featured-projects">
+      {featured.map((project) => (
+        <a href={sitePath(`/projects/${project.data.slug}/`)}>
+          <div class="project-image">
+            <img
+              src={sitePath(project.data.cover)}
+              alt={project.data.coverAlt}
+              width="1600"
+              height="960"
+            />
+          </div>
+          <div class="project-head">
+            <span class="meta">{project.data.year} · Featured</span>
+            <span aria-hidden="true">↗</span>
+          </div>
+          <h2>{project.data.name}</h2>
+          <p>{project.data.description}</p>
+          <div class="tech">{project.data.tech.join(' · ')}</div>
+        </a>
+      ))}
+    </div>
+    <div class="project-list">
+      {rest.map((project) => (
+        <a href={sitePath(`/projects/${project.data.slug}/`)}>
+          <span class="meta">{project.data.year}</span>
+          <h2>{project.data.name}</h2>
+          <p>{project.data.description}</p>
+          <span class="tech">{project.data.tech.join(' · ')}</span>
+          <span class="arrow">→</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .featured-projects {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    margin-bottom: 7rem;
+  }
+  .project-image {
+    overflow: hidden;
+    margin-bottom: 1.4rem;
+  }
+  .project-image img {
+    aspect-ratio: 5 / 3;
+    object-fit: cover;
+    transition: transform 400ms ease;
+  }
+  a:hover .project-image img {
+    transform: scale(1.012);
+  }
+  .project-head {
+    display: flex;
+    justify-content: space-between;
+    color: var(--accent);
+  }
+  h2 {
+    margin: 0.6rem 0;
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+  p {
+    max-width: 34rem;
+    color: var(--muted-foreground);
+  }
+  .tech {
+    color: var(--muted-foreground);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .project-list {
+    border-top: 1px solid var(--border);
+  }
+  .project-list a {
+    display: grid;
+    grid-template-columns: 5rem 0.5fr 1fr 0.6fr auto;
+    gap: 2rem;
+    align-items: baseline;
+    padding: 1.8rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .project-list h2 {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+  .project-list p {
+    margin: 0;
+  }
+  .arrow {
+    color: var(--accent);
+  }
+  a:hover h2 {
+    color: var(--accent);
+  }
+  @media (max-width: 760px) {
+    .featured-projects {
+      grid-template-columns: 1fr;
+    }
+    .project-list a {
+      grid-template-columns: 3rem 1fr auto;
+      gap: 1rem;
+    }
+    .project-list p,
+    .project-list .tech {
+      grid-column: 2 / -1;
+    }
+    .project-list .arrow {
+      grid-column: 3;
+      grid-row: 1;
+    }
+  }
+</style>

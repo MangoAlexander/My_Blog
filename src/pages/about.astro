@@ -1,0 +1,152 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import site from '@/data/site.json';
+---
+
+<BaseLayout
+  title="About — Quiet Signal"
+  description="About the person and ideas behind Quiet Signal."
+>
+  <header class="about-hero container">
+    <p class="eyebrow">About</p>
+    <h1>
+      I make digital things with <em>care, curiosity,</em> and a preference for the long view.
+    </h1>
+  </header>
+  <section class="about-grid container">
+    <aside>
+      <div
+        class="portrait-placeholder"
+        role="img"
+        aria-label="Portrait placeholder with the initials YN"
+      >
+        YN
+      </div>
+      <p class="meta">
+        Based somewhere between
+        <br />
+        code and the written word.
+      </p>
+    </aside>
+    <div class="about-copy">
+      <section>
+        <span class="index">01</span>
+        <div>
+          <h2>Who I am</h2>
+          <p>
+            I’m {site.author}, a designer and developer interested in the parts of technology that
+            become invisible when they work well. This site is where I publish the thinking behind
+            that work.
+          </p>
+        </div>
+      </section>
+      <section>
+        <span class="index">02</span>
+        <div>
+          <h2>What I do</h2>
+          <p>
+            I shape interfaces, build resilient web systems, and write about the choices connecting
+            them. I care about products that are comprehensible, repairable, and respectful of
+            attention.
+          </p>
+        </div>
+      </section>
+      <section>
+        <span class="index">03</span>
+        <div>
+          <h2>What I care about</h2>
+          <p>
+            Clear language. Open formats. Thoughtful defaults. Accessibility as a design material.
+            Performance as a feature. Tools that help people develop a practice instead of a
+            dependency.
+          </p>
+        </div>
+      </section>
+      <section>
+        <span class="index">04</span>
+        <div>
+          <h2>Say hello</h2>
+          <p>
+            The internet is better when small websites have doors. If something here connects with
+            your work, <a href={`mailto:${site.email}`}>send a note</a>.
+          </p>
+        </div>
+      </section>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .about-hero {
+    padding-block: clamp(5rem, 12vw, 10rem);
+  }
+  .about-hero h1 {
+    max-width: 18ch;
+    margin: 1rem 0 0;
+    font-family: var(--serif);
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 400;
+    letter-spacing: -0.05em;
+    line-height: 0.98;
+  }
+  .about-hero em {
+    color: var(--accent);
+    font-weight: 400;
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 0.55fr 1fr;
+    gap: clamp(4rem, 10vw, 10rem);
+    padding-block: 6rem 9rem;
+    border-top: 1px solid var(--border);
+  }
+  .portrait-placeholder {
+    display: grid;
+    width: min(100%, 20rem);
+    aspect-ratio: 4/5;
+    place-items: center;
+    background: var(--muted);
+    color: var(--accent);
+    font-family: var(--serif);
+    font-size: 5rem;
+  }
+  .about-grid aside p {
+    margin-top: 1.2rem;
+  }
+  .about-copy section {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1.2rem;
+    padding: 0 0 3.5rem;
+  }
+  .index {
+    color: var(--accent);
+    font-size: 0.72rem;
+  }
+  .about-copy h2 {
+    margin: 0 0 1rem;
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3.1rem);
+    font-weight: 400;
+  }
+  .about-copy p {
+    max-width: 42rem;
+    margin: 0;
+    color: var(--muted-foreground);
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    line-height: 1.75;
+  }
+  .about-copy a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  @media (max-width: 700px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+    .portrait-placeholder {
+      width: 12rem;
+    }
+  }
+</style>

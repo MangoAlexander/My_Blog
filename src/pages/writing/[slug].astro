@@ -1,0 +1,23 @@
+---
+import { getCollection, render } from 'astro:content';
+import ArticleLayout from '@/layouts/ArticleLayout.astro';
+import { byDateDesc, filterPublished, relatedByTags } from '@/utils/content';
+export async function getStaticPaths() {
+  const posts = filterPublished(await getCollection('writing')).sort(byDateDesc);
+  return posts.map((post, index) => ({
+    params: { slug: post.data.slug },
+    props: {
+      post,
+      previous: posts[index + 1],
+      next: posts[index - 1],
+      related: relatedByTags(post, posts),
+    },
+  }));
+}
+const { post, previous, next, related } = Astro.props;
+const { Content, headings } = await render(post);
+---
+
+<ArticleLayout {post} {headings} {previous} {next} {related}>
+  <Content />
+</ArticleLayout>

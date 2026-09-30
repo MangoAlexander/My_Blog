@@ -1,0 +1,95 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, readingTime } from '@/utils/content';
+import { sitePath } from '@/utils/url';
+interface Props {
+  post: CollectionEntry<'writing'>;
+  featured?: boolean;
+}
+const { post, featured = false } = Astro.props;
+const time = readingTime(post.body ?? '');
+---
+
+<article class:list={['article-row', { featured }]}>
+  <a
+    class="row-link"
+    href={sitePath(`/writing/${post.data.slug}/`)}
+    aria-label={`Read ${post.data.title}`}
+  ></a>
+  <div class="article-meta meta">
+    <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+    <span>{time.text}</span>
+  </div>
+  <div>
+    <h3>
+      {post.data.title}
+      <span aria-hidden="true">↗</span>
+    </h3>
+    <p>{post.data.description}</p>
+    <div class="tag-list">
+      {post.data.tags.map((tag) => (
+        <span class="tag">{tag}</span>
+      ))}
+    </div>
+  </div>
+</article>
+<style>
+  .article-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(8.5rem, 0.35fr) 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+  }
+  .row-link {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+  }
+  .article-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  h3 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(1.6rem, 3vw, 2.5rem);
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.07;
+  }
+  h3 span {
+    display: inline-block;
+    margin-left: 0.5rem;
+    color: var(--accent);
+    font-family: var(--sans);
+    font-size: 0.5em;
+    transition: transform 180ms ease-out;
+  }
+  p {
+    max-width: 43rem;
+    margin: 0.8rem 0 1rem;
+    color: var(--muted-foreground);
+  }
+  .article-row:hover h3 span {
+    transform: translate(0.2rem, -0.2rem);
+  }
+  .article-row:hover h3 {
+    color: var(--accent);
+  }
+  .article-row :global(.tag-list) {
+    position: relative;
+    z-index: 2;
+  }
+  @media (max-width: 650px) {
+    .article-row {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+    .article-meta {
+      flex-direction: row;
+      gap: 1rem;
+    }
+  }
+</style>

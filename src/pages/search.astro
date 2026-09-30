@@ -1,0 +1,169 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Search — Quiet Signal"
+  description="Search all published writing, notes, and projects."
+  noindex
+>
+  <section class="search-page container">
+    <p class="eyebrow">Find something</p>
+    <h1 class="page-title">Search</h1>
+    <div class="search-box">
+      <label class="sr-only" for="search-input">
+        Search the site
+      </label>
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Type a title, phrase, or subject…"
+        autocomplete="off"
+        autofocus
+      />
+      <kbd>Esc</kbd>
+    </div>
+    <p id="search-status" class="status" aria-live="polite">
+      Start typing to search the published archive.
+    </p>
+    <ol id="search-results"></ol>
+  </section>
+</BaseLayout>
+<script>
+  import { sitePath } from '@/utils/url';
+  const input = document.querySelector<HTMLInputElement>('#search-input');
+  const list = document.querySelector<HTMLOListElement>('#search-results');
+  const status = document.querySelector<HTMLElement>('#search-status');
+  let pagefind: any;
+  const loadSearch = async () => {
+    if (!pagefind) {
+      const modulePath = sitePath('/pagefind/pagefind.js');
+      const dynamicImport = new Function('path', 'return import(path)') as (
+        path: string,
+      ) => Promise<any>;
+      pagefind = await dynamicImport(modulePath);
+      await pagefind.options({ baseUrl: import.meta.env.BASE_URL });
+      await pagefind.init();
+    }
+    return pagefind;
+  };
+  input?.addEventListener('input', async () => {
+    const query = input.value.trim();
+    if (!list || !status) return;
+    if (!query) {
+      list.innerHTML = '';
+      status.textContent = 'Start typing to search the published archive.';
+      return;
+    }
+    status.textContent = 'Searching…';
+    try {
+      const engine = await loadSearch();
+      const search = await engine.search(query);
+      const results = await Promise.all(
+        search.results.slice(0, 12).map((result: any) => result.data()),
+      );
+      list.innerHTML = results
+        .map(
+          (result: any) =>
+            `<li><a href="${result.url}"><span class="result-type">Result</span><h2>${result.meta.title}</h2><p>${result.excerpt}</p><span class="result-arrow">→</span></a></li>`,
+        )
+        .join('');
+      status.textContent = `${search.results.length} result${search.results.length === 1 ? '' : 's'} for “${query}”.`;
+    } catch (error) {
+      console.error('Search failed to initialize', error);
+      status.textContent = 'Search becomes available after a production build.';
+    }
+  });
+  addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && input) {
+      input.value = '';
+      input.dispatchEvent(new Event('input'));
+      input.blur();
+    }
+  });
+</script>
+<style>
+  .search-page {
+    min-height: 75vh;
+    padding-block: clamp(5rem, 10vw, 8rem);
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+  .search-box {
+    display: flex;
+    align-items: center;
+    margin-top: 4rem;
+    border-bottom: 1px solid var(--foreground);
+  }
+  input {
+    width: 100%;
+    padding: 1rem 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--foreground);
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 4vw, 3rem);
+  }
+  input::placeholder {
+    color: var(--muted-foreground);
+    opacity: 0.55;
+  }
+  kbd {
+    padding: 0.25rem 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: 0.2rem;
+    color: var(--muted-foreground);
+    font: 0.65rem var(--mono);
+  }
+  .status {
+    margin: 1.2rem 0 3rem;
+    color: var(--muted-foreground);
+    font-size: 0.8rem;
+  }
+  #search-results {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--border);
+  }
+  #search-results :global(li) {
+    border-bottom: 1px solid var(--border);
+  }
+  #search-results :global(a) {
+    position: relative;
+    display: block;
+    padding: 1.7rem 3rem 1.7rem 0;
+  }
+  #search-results :global(h2) {
+    margin: 0.35rem 0;
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    font-weight: 400;
+  }
+  #search-results :global(p) {
+    margin: 0;
+    color: var(--muted-foreground);
+    font-size: 0.9rem;
+  }
+  #search-results :global(mark) {
+    background: var(--selection);
+    color: inherit;
+  }
+  #search-results :global(.result-type) {
+    color: var(--accent);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+  }
+  #search-results :global(.result-arrow) {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    color: var(--accent);
+  }
+</style>

@@ -1,0 +1,20 @@
+{
+  "name": "一个有温度的Blog",
+  "author": "芒果鸭梨山楂",
+  "title": "一个有温度的Blog — 芒果鸭梨山楂",
+  "description": "芒果鸭梨山楂的个人博客。一名大三学生，记录学习、生活与思考。",
+  "tagline": "一名大三学生",
+  "heroText": "认真生活，\n持续记录。",
+  "heroSubtitle": "一名大三学生的学习、生活与思考。",
+  "url": "https://mangoalexander.github.io/My_Blog",
+  "email": "2980567271@qq.com",
+  "github": "https://github.com/MangoAlexander",
+  "social": [{ "label": "GitHub", "url": "https://github.com/MangoAlexander" }],
+  "footer": "慢慢记录，真诚分享。",
+  "navigation": [
+    { "label": "Writing", "href": "/writing" },
+    { "label": "Notes", "href": "/notes" },
+    { "label": "Projects", "href": "/projects" },
+    { "label": "About", "href": "/about" }
+  ]
+}

@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArticleRow from '@/components/ArticleRow.astro';
+import { byDateDesc, filterPublished } from '@/utils/content';
+const posts = filterPublished(await getCollection('writing')).sort(byDateDesc);
+const featured = posts.filter((post) => post.data.featured);
+const rest = posts.filter((post) => !post.data.featured);
+---
+
+<BaseLayout
+  title="Writing — Quiet Signal"
+  description="Long-form essays about design, software, publishing, and attention."
+>
+  <header class="page-shell container">
+    <p class="eyebrow">Essays & observations</p>
+    <h1 class="page-title">Writing</h1>
+    <p class="lede">
+      Ideas, experiments, and long-form thoughts on making durable things with care.
+    </p>
+  </header>
+  <section class="section container">
+    {featured.length > 0 && (
+      <>
+        <h2 class="list-label">Featured</h2>
+        <ol class="rule-list featured-list">
+          {featured.map((post) => (
+            <li>
+              <ArticleRow post={post} featured />
+            </li>
+          ))}
+        </ol>
+      </>
+    )}
+    <h2 class="list-label all-label">All writing</h2>
+    <ol class="rule-list">
+      {rest.map((post) => (
+        <li>
+          <ArticleRow post={post} />
+        </li>
+      ))}
+    </ol>
+  </section>
+</BaseLayout>
+<style>
+  .list-label {
+    margin: 0 0 1.2rem;
+    color: var(--muted-foreground);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .all-label {
+    margin-top: 5rem;
+  }
+  .featured-list {
+    background: var(--card);
+    padding-inline: clamp(1.2rem, 3vw, 2.5rem);
+    border-bottom: 1px solid var(--border);
+  }
+</style>

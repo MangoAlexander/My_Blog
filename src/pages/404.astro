@@ -1,0 +1,63 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { sitePath } from '@/utils/url';
+---
+
+<BaseLayout
+  title="Page not found — Quiet Signal"
+  description="The requested page could not be found."
+  noindex
+>
+  <section class="missing container">
+    <div class="number" aria-hidden="true">
+      404
+    </div>
+    <div class="missing-copy">
+      <p class="eyebrow">Page not found</p>
+      <h1>Looks like this page wandered off.</h1>
+      <p>The address may have changed, or the page may never have been here.</p>
+      <a class="text-link" href={sitePath('/')}>
+        Back home <span>→</span>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .missing {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    min-height: calc(100vh - 10rem);
+    padding-block: 5rem;
+  }
+  .number {
+    color: var(--muted);
+    font-family: var(--serif);
+    font-size: clamp(9rem, 27vw, 25rem);
+    letter-spacing: -0.1em;
+    line-height: 0.7;
+  }
+  .missing h1 {
+    max-width: 10ch;
+    margin: 0 0 1.5rem;
+    font-family: var(--serif);
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 400;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+  }
+  .missing-copy > p:not(.eyebrow) {
+    max-width: 30rem;
+    margin-bottom: 2rem;
+    color: var(--muted-foreground);
+  }
+  @media (max-width: 700px) {
+    .missing {
+      grid-template-columns: 1fr;
+    }
+    .number {
+      font-size: 9rem;
+    }
+  }
+</style>

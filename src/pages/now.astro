@@ -1,0 +1,79 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import now from '@/data/now.json';
+import { formatDate } from '@/utils/content';
+const groups = [
+  ['Reading', now.reading],
+  ['Building', now.building],
+  ['Learning', now.learning],
+  ['Listening', now.listening],
+  ['Thinking', now.thinking],
+] as const;
+---
+
+<BaseLayout
+  title="Now — Quiet Signal"
+  description="What I am reading, building, learning, listening to, and thinking about now."
+>
+  <header class="page-shell container">
+    <p class="eyebrow">A living snapshot</p>
+    <h1 class="page-title">Now</h1>
+    <p class="lede">{now.intro}</p>
+    <p class="updated meta">Last updated {formatDate(now.updated)}</p>
+  </header>
+  <section class="now-list container">
+    {groups.map(([title, items], index) => (
+      <div class="now-row">
+        <span class="number meta">0{index + 1}</span>
+        <h2>{title}</h2>
+        <ul>
+          {items.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </section>
+</BaseLayout>
+<style>
+  .updated {
+    margin-top: 2.5rem;
+  }
+  .now-list {
+    padding-bottom: 8rem;
+  }
+  .now-row {
+    display: grid;
+    grid-template-columns: 4rem 0.6fr 1fr;
+    gap: 2rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .now-row:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+  h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3.3rem);
+    font-weight: 400;
+    line-height: 1;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--muted-foreground);
+  }
+  li + li {
+    margin-top: 0.8rem;
+  }
+  @media (max-width: 650px) {
+    .now-row {
+      grid-template-columns: 2rem 1fr;
+    }
+    .now-row ul {
+      grid-column: 2;
+    }
+  }
+</style>

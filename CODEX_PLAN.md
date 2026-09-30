@@ -95,7 +95,8 @@ Last verified: 2026-09-30 (Asia/Shanghai)
 - [x] `/Myblog` repository base-path build verified, including assets, RSS, robots, and sitemap URLs
 - [x] GitHub Pages repository URL configured; no `CNAME` is emitted until a real custom domain is available
 - [x] Restrained monthly Dependabot configuration
-- [ ] Enable Pages and replace/configure the real domain — USER ACTION REQUIRED
+- [x] GitHub Pages enabled with GitHub Actions and HTTPS
+- [ ] Optional: configure a future custom domain — USER ACTION REQUIRED
 
 ## Documentation
 
@@ -171,6 +172,7 @@ Last verified: 2026-09-30 (Asia/Shanghai)
 ## User Action Required
 
 - [x] Replace the public identity, contact, social links, and canonical URL
-- [ ] Push the repository to GitHub and authorize it in Pages CMS
-- [ ] Select GitHub Actions as the Pages deployment source
+- [x] Push the repository to GitHub
+- [x] Select GitHub Actions as the Pages deployment source
+- [ ] Authorize the repository in Pages CMS when browser editing is needed
 - [ ] Optional: configure a future custom domain, DNS, `CNAME`, and `SITE_URL`

@@ -3,7 +3,7 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 import { codeTitleTransformer } from './src/utils/code-titles.mjs';
 
-const site = process.env.SITE_URL || 'https://mangoalexander.github.io/My_Blog';
+const site = process.env.SITE_URL || 'https://www.mangoduck.cn';
 const base = (process.env.BASE_PATH || '/').replace(/\/?$/, '/');
 
 export default defineConfig({

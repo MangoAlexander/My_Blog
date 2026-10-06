@@ -76,7 +76,7 @@ Workflow permissions are least-privilege: CI has read-only repository access; de
 
 ## Custom domain and DNS
 
-The site currently uses its GitHub Pages repository URL, so no `public/CNAME` file is present. When a custom domain is ready, create that file, set the `SITE_URL` repository variable to the same HTTPS origin, and configure DNS using [docs/DOMAIN_SETUP.md](docs/DOMAIN_SETUP.md).
+The site uses `https://www.mangoduck.cn`. The custom domain is recorded in `public/CNAME`, and the Actions repository variable `SITE_URL` must use the same HTTPS origin. DNS setup and verification are covered in [docs/DOMAIN_SETUP.md](docs/DOMAIN_SETUP.md).
 
 ## Directory structure
 

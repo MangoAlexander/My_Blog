@@ -93,10 +93,10 @@ Last verified: 2026-09-30 (Asia/Shanghai)
 - [x] Gated Pages deployment workflow
 - [x] Root/custom-domain build verified
 - [x] `/Myblog` repository base-path build verified, including assets, RSS, robots, and sitemap URLs
-- [x] GitHub Pages repository URL configured; no `CNAME` is emitted until a real custom domain is available
+- [x] Custom domain `www.mangoduck.cn` configured in site metadata and `public/CNAME`
 - [x] Restrained monthly Dependabot configuration
 - [x] GitHub Pages enabled with GitHub Actions and HTTPS
-- [ ] Optional: configure a future custom domain — USER ACTION REQUIRED
+- [ ] Add and verify the Aliyun DNS record, then confirm GitHub Pages HTTPS — USER ACTION REQUIRED
 
 ## Documentation
 
@@ -175,4 +175,4 @@ Last verified: 2026-09-30 (Asia/Shanghai)
 - [x] Push the repository to GitHub
 - [x] Select GitHub Actions as the Pages deployment source
 - [ ] Authorize the repository in Pages CMS when browser editing is needed
-- [ ] Optional: configure a future custom domain, DNS, `CNAME`, and `SITE_URL`
+- [ ] Add the Aliyun DNS record and wait for certificate provisioning
